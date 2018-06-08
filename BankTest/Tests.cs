@@ -11,9 +11,35 @@ namespace BankTest
         [InlineData(double.NaN)]
         [InlineData(double.PositiveInfinity)]
         [InlineData(double.NegativeInfinity)]
-        public void ContructorTest(double r)
+        public void Contructor_InvalidParameters_InterestRate_ThrowsException(double r)
         {
             Assert.Throws<Exception>(() => new Account(100, r));
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(double.NaN)]
+        [InlineData(double.PositiveInfinity)]
+        [InlineData(double.NegativeInfinity)]
+        public void Constructor_InvalidParameters_Balance_ThrowsException(double balance)
+        {
+            Assert.Throws<Exception>(() => new Account(balance, 0.01));
+        }
+
+        [Fact]
+        public void Constructor_Balance_Successful()
+        {
+            Account account = new Account(100, 0.01);
+            double expectedBalance = 100;
+            Assert.Equal(account.Balance, expectedBalance);
+        }
+
+        [Fact]
+        public void Constructor_InterestRate_Successful()
+        {
+            Account account = new Account(100, 0.01);
+            double expectedInterestRate = 0.01;
+            Assert.Equal(account.InterestRate, expectedInterestRate);
         }
         #endregion
 
@@ -26,7 +52,7 @@ namespace BankTest
         [InlineData(double.NegativeInfinity)]
         [InlineData(double.NaN)]
         //[InlineData(double.Epsilon)]
-        public void DepositTest(double amount)
+        public void Deposit_InvalidParameters_ThrowsException(double amount)
         {
             Account account = TestAccount.CreateAccount(100);
             Assert.Throws<Exception>(() => account.Deposit(amount));
@@ -51,7 +77,7 @@ namespace BankTest
         [InlineData(double.PositiveInfinity)]
         [InlineData(double.NegativeInfinity)]
         [InlineData(double.NaN)]
-        public void WithdrawTest(double amount)
+        public void Withdraw_InvalidParameters_ThrowsException(double amount)
         {
             Account account = TestAccount.CreateAccount(100);
             Assert.Throws<Exception>(() => account.Withdraw(amount));
@@ -77,7 +103,7 @@ namespace BankTest
         [InlineData(100, 100, double.PositiveInfinity)]
         [InlineData(100, 100, double.NegativeInfinity)]
         [InlineData(100, 100, double.NaN)]
-        public void TransferTest(double initialBalanceSenderAccount, double initialBalanceRecipientAccount, double transferAmount)
+        public void Transfer_InvalidParameters_ThrowsException(double initialBalanceSenderAccount, double initialBalanceRecipientAccount, double transferAmount)
         {
             Account accountSender = new Account(initialBalanceSenderAccount);
             Account accountRecipient = new Account(initialBalanceRecipientAccount);
@@ -85,21 +111,21 @@ namespace BankTest
         }
 
         [Fact]
-        public void TransferToSameAccount()
+        public void Transfer_ToSameAccount_ThrowsException()
         {
             Account accountSender = new Account(100);
             Assert.Throws<Exception>(() => accountSender.Transfer(accountSender, 10));
         }
 
         [Fact]
-        public void TransferToNullAccount()
+        public void Transfer_ToNullAccount_ThrowsException()
         {
             Account accountSender = new Account(100);
             Assert.Throws<Exception>(() => accountSender.Transfer(null, 10));
         }
 
         [Fact]
-        public void TransferCheckReturnValue()
+        public void Transfer_CheckReturnValue_ThrowsException()
         {
             Account accountSender = new Account(100);
             Account accountRecipient = new Account(100);
@@ -107,7 +133,7 @@ namespace BankTest
         }
 
         [Fact]
-        public void TransferSumMatchTest()
+        public void Transfer_SumMatchTest_Successful()
         {
             double initialBalance = 100;
             double transferAmount = 10;
@@ -118,7 +144,7 @@ namespace BankTest
         }
 
         [Fact]
-        public void TransferSenderDebitTest()
+        public void Transfer_SenderDebitTest_Succesful()
         {
             double initialBalance = 100;
             double transferAmount = 10;
@@ -130,7 +156,7 @@ namespace BankTest
         }
 
         [Fact]
-        public void TransferSenderCreditTest()
+        public void Transfer_SenderCreditTest_Successful()
         {
             double initialBalance = 100;
             double transferAmount = 10;
@@ -147,7 +173,7 @@ namespace BankTest
         [InlineData(double.NaN)]
         [InlineData(double.PositiveInfinity)]
         [InlineData(double.NegativeInfinity)]
-        public void InterestTest(double interestRate)
+        public void CalculateInterest_InvalidParameters_ThrowsException(double interestRate)
         {
             Assert.Throws<Exception>(() =>
             {
@@ -164,7 +190,7 @@ namespace BankTest
         [InlineData(0, 0.015)]
         [InlineData(0, 0.00)]
         [InlineData(0, -0.02)]
-        public void CalculateInterestBalanceAfterInterestPayment(double initialBalance, double r)
+        public void CalculateInterest_BalanceAfterInterestPayment_Successful(double initialBalance, double r)
         {
             double expectedBalance = initialBalance * (1 + r);
             Account account = new Account(initialBalance, r);
@@ -173,7 +199,7 @@ namespace BankTest
         }
 
         [Fact]
-        public void CalculateInterestAccrued()
+        public void CalculateInterest_AccruedInterestReturned_Successful()
         {
             double r = -0.02;
             double initialBalance = 100;

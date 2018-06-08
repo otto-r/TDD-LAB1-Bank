@@ -7,15 +7,27 @@ namespace BankAccountLab
     public class Account
     {
         public double Balance { get; private set; }
-        public double InterestRate { get; set; }
+        public double InterestRate { get; private set; }
 
         public Account(double initBalance)
         {
+            if (double.IsNaN(initBalance))
+                throw new Exception("Balance must be a value.");
+            if (double.IsInfinity(initBalance) || double.IsNegativeInfinity(initBalance))
+                throw new Exception("Balance cannot be infinity or negative infinity");
+            if (initBalance < 0)
+                throw new Exception("Blance cannot be negative.");
             Balance = initBalance;
         }
 
         public Account(double initBalance, double r)
         {
+            if (double.IsNaN(initBalance))
+                throw new Exception("Balance must be a value.");
+            if (double.IsInfinity(initBalance) || double.IsNegativeInfinity(initBalance))
+                throw new Exception("Balance cannot be infinity or negative infinity");
+            if (initBalance < 0)
+                throw new Exception("Blance cannot be negative.");
             if (double.IsNaN(r))
                 throw new Exception("Interest rate cannot be NaN.");
             if (double.IsPositiveInfinity(r) || double.IsNegativeInfinity(r))
