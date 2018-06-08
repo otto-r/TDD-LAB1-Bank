@@ -60,8 +60,7 @@ namespace BankAccountLab
             if (amountBeingTransferd <= 0 || double.IsNaN(amountBeingTransferd))
                 throw new Exception("Cannot transfer zero, negative or NaN amount");
             if (Balance < amountBeingTransferd)
-                throw new Exception($"Not sufficient funds in account. \nBalance: {Balance} \nAmount attepted to transfer: {amountBeingTransferd}");
-
+                throw new Exception($"Not sufficient funds in account. \nBalance: {Balance} \nAmount attempted to transfer: {amountBeingTransferd}");
             Balance -= amountBeingTransferd;
             recipientAccount.Balance += amountBeingTransferd;
             return true;
